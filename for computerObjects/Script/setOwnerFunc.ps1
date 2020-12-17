@@ -7,6 +7,10 @@ param(
 $domainVal=$Owner.Split('\\')[0]
 $ownerVal=$Owner.Split('\\')[1]
 
+if($ownerVal -eq 'Administrators'){
+    $domainVal='BUILTIN'
+}
+
 $obj=Get-ADObject $Object|select -First 1
 $objPath="AD:{0}" -f $obj.DistinguishedName
 $ACL=Get-Acl -Path $objPath

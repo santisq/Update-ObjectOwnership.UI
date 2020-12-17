@@ -7,8 +7,11 @@ param(
 $domainVal=$Owner.Split('\\')[0]
 $ownerVal=$Owner.Split('\\')[1]
 
-$filter="(|(distinguishedname=$Object)(samaccountname=$Object)(name=$Object))"
-$obj=Get-ADObject -LDAPFilter $filter|select -First 1
+if($ownerVal -eq 'Administrators'){
+    $domainVal='BUILTIN'
+}
+
+$obj=Get-ADObject $Object|select -First 1
 $objPath="AD:{0}" -f $obj.DistinguishedName
 $ACL=Get-Acl -Path $objPath
 $ownerObj=New-Object System.Security.Principal.NTAccount($domainVal,$ownerVal)
